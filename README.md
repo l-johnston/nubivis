@@ -7,12 +7,14 @@ SI base units expression internally represented as a set of Factors, e.g.
 Factors(multiplier=1/1000, offset=0, m=1, kg=0, s=-1, A=0, K=0, mol=0, cd=0). From here
 all computations are in SI base units. For use in Numpy's new DType system:
 - convert each array's unit expression string to Factors
-- if offset > 0, covert the array before array ops
+- check for valid op based on base unit factors (e.g. can't add 'm' to 's')
+- convert each array by applying multiplier/offset before array ops
 - perform array ops
-- combine Factors from arrays
-- multiply final array by Factors.multiplier
+- perform Factors arithmetic, e.g. 'm'*'m'=m**2
 - do a reverse lookup from Factors to a derived SI unit, e.g. 'V'
 - return to user
+
+Mathcad works this way.
 
 The recursive-decent parser is prototyped in `nubivis.prototype`.
 ```

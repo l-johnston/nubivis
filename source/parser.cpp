@@ -15,15 +15,75 @@ using std::vector;
 
 const int64_t LENMAXINT{2};
 const int64_t LENMAXSTR{128};
-map<string, Factors> BASEUNITS{
+
+map<string, Factors> SIUNITS{
     {"m", Factors(1, 0, 1, 0, 0, 0, 0, 0, 0)},
     {"kg", Factors(1, 0, 0, 1, 0, 0, 0, 0, 0)},
+    {"g", Factors(Fraction(1, 1000), 0, 0, 1, 0, 0, 0, 0, 0)},
     {"s", Factors(1, 0, 0, 0, 1, 0, 0, 0, 0)},
     {"A", Factors(1, 0, 0, 0, 0, 1, 0, 0, 0)},
     {"K", Factors(1, 0, 0, 0, 0, 0, 1, 0, 0)},
     {"mol", Factors(1, 0, 0, 0, 0, 0, 0, 1, 0)},
     {"cd", Factors(1, 0, 0, 0, 0, 0, 0, 0, 1)},
+    {"rad", Factors()},
+    {"sr", Factors()},
+    {"Hz", Factors(1, 0, 0, 0, -1, 0, 0, 0, 0)},
+    {"N", Factors(1, 0, 1, 1, -2, 0, 0, 0, 0)},
+    {"Pa", Factors(1, 0, -1, 1, -2, 0, 0, 0, 0)},
+    {"J", Factors(1, 0, 2, 1, -2, 0, 0, 0, 0)},
+    {"W", Factors(1, 0, 2, 1, -3, 0, 0, 0, 0)},
+    {"C", Factors(1, 0, 0, 0, 1, 1, 0, 0, 0)},
+    {"V", Factors(1, 0, 2, 1, -3, -1, 0, 0, 0)},
+    {"F", Factors(1, 0, -2, -1, 4, 2, 0, 0, 0)},
+    {"Ω", Factors(1, 0, 2, 1, -3, -2, 0, 0, 0)},
+    {"S", Factors(1, 0, -2, -1, -2, -1, 0, 0, 0)},
+    {"Wb", Factors(1, 0, 2, 1, -2, -1, 0, 0, 0)},
+    {"T", Factors(1, 0, 0, 1, -2, -1, 0, 0, 0)},
+    {"H", Factors(1, 0, 2, 1, -2, -2, 0, 0, 0)},
+    {"degC", Factors(1, Fraction(27315, 100), 0, 0, 0, 0, 1, 0, 0)},
+    {"lm", Factors(1, 0, 0, 0, 0, 0, 0, 0, 1)},
+    {"lx", Factors(1, 0, -2, 0, 0, 0, 0, 0, 1)},
+    {"Bq", Factors(1, 0, 0, 0, -1, 0, 0, 0, 0)},
+    {"Gy", Factors(1, 0, 2, 0, -2, 0, 0, 0, 0)},
+    {"Sv", Factors(1, 0, 2, 0, -2, 0, 0, 0, 0)},
+    {"kat", Factors(1, 0, 0, 0, -1, 0, 0, 1, 0)},
+    {"L", Factors(Fraction(1, 1000), 0, 3, 0, 0, 0, 0, 0, 0)},
 };
+
+map<string, Factors> NONSIUNITS{
+    {"Å", Factors(Fraction(1, 10000000000), 1, 0, 0, 0, 0, 0, 0, 0)},
+    {"ua", Factors(1.495979e11, 0, 1, 0, 0, 0, 0, 0, 0)},
+    {"ch", Factors(2.011684e1, 0, 1, 0, 0, 0, 0, 0, 0)},
+    {"fathom", Factors(1.828804, 0, 1, 0, 0, 0, 0, 0, 0)},
+    {"fermi", Factors(Fraction(1, 1000000000000000), 0, 1, 0, 0, 0, 0, 0, 0)},
+    {"ft", Factors(3.048e-1, 0, 1, 0, 0, 0, 0, 0, 0)},
+    {"in", Factors(2.54e-2, 0, 1, 0, 0, 0, 0, 0, 0)},
+    {"µ", Factors(Fraction(1, 1000000), 0, 1, 0, 0, 0, 0, 0, 0)},
+    {"mil", Factors(Fraction(254, 10000000), 0, 1, 0, 0, 0, 0, 0, 0)},
+    {"mi", Factors(1.609344e3, 0, 1, 0, 0, 0, 0, 0, 0)},
+    {"yd", Factors(9.144e-1, 0, 1, 0, 0, 0, 0, 0, 0)},
+    {"oz", Factors(2.834952e-2, 0, 0, 1, 0, 0, 0, 0, 0)},
+    {"lb", Factors(4.535924e-1, 0, 0, 1, 0, 0, 0, 0, 0)},
+    {"d", Factors(8.64e4, 0, 0, 0, 1, 0, 0, 0, 0)},
+    {"h", Factors(3.6e3, 0, 0, 0, 1, 0, 0, 0, 0)},
+    {"min", Factors(60, 0, 0, 0, 1, 0, 0, 0, 0)},
+    {"degF", Factors(Fraction(10, 18), 459.67, 0, 0, 0, 0, 1, 0, 0)},
+    {"degR", Factors(Fraction(10, 18), 0, 0, 0, 0, 0, 1, 0, 0)},
+    {"BTU", Factors(1.05587e3, 0, 2, 1, -2, 0, 0, 0, 0)},
+    {"cal", Factors(4.19002, 0, 2, 1, -2, 0, 0, 0, 0)},
+    {"eV", Factors(1.602176e-19, 0, 2, 1, -2, 0, 0, 0, 0)},
+    {"lbf", Factors(4.448222, 0, 1, 1, -2, 0, 0, 0, 0)},
+    {"horsepower", Factors(7.46e2, 0, 2, 1, -3, 0, 0, 0, 0)},
+    {"atm", Factors(1.01325e5, 0, -1, 1, -2, 0, 0, 0, 0)},
+    {"bar", Factors(Fraction(100000, 1), 0, -1, 1, -2, 0, 0, 0, 0)},
+    {"inHg", Factors(3.386389e3, 0, -1, 1, -2, 0, 0, 0, 0)},
+    {"psi", Factors(6.894757, 0, -1, 1, -2, 0, 0, 0, 0)},
+    {"torr", Factors(1.333224e2, 0, -1, 1, -2, 0, 0, 0, 0)},
+    {"rad", Factors(1e-2, 0, 2, 0, -2, 0, 0, 0, 0)},
+    {"rem", Factors(1e-2, 0, 2, 0, -2, 0, 0, 0, 0)},
+    {"gal", Factors(3.785412e-3, 0, 3, 0, 0, 0, 0, 0, 0)},
+};
+
 map<string, Fraction> PREFIXES{
     {"P", Fraction(1000000000000000)},
     {"T", Fraction(1000000000000)},
@@ -40,9 +100,54 @@ map<string, Fraction> PREFIXES{
     {"p", Fraction(1, 1000000000000)},
     {"f", Fraction(1, 1000000000000000)},
 };
+
 const vector<string> NUMBERS{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 const vector<string> OPERATORS{"-", "+", "*", "/", "**", "(", ")"};
-const vector<string> LETTERS{"a", "A", "c", "d", "E", "f", "g", "G", "h", "k", "K", "l", "m", "µ", "M", "o", "p", "P", "s", "T", "y", "Y", "z", "Z"};
+const vector<string> LETTERS{
+    "a",
+    "A",
+    "B",
+    "b",
+    "c",
+    "C",
+    "d",
+    "e",
+    "E",
+    "f",
+    "F",
+    "g",
+    "G",
+    "h",
+    "H",
+    "i",
+    "k",
+    "K",
+    "l",
+    "L",
+    "m",
+    "M",
+    "µ",
+    "n",
+    "N",
+    "o",
+    "p",
+    "P",
+    "q",
+    "r",
+    "S",
+    "s",
+    "t",
+    "T",
+    "v",
+    "V",
+    "W",
+    "x",
+    "y",
+    "Y",
+    "z",
+    "Z",
+    "Ω",
+};
 vector<string> simpletokens{};
 
 bool Token::startswith(const char *s)
@@ -301,34 +406,30 @@ Factors Parser::get_unit()
 {
     Token t{ts.get()};
     Factors f{};
-    if (t.endswith("g"))
+    if (NONSIUNITS.find(t.str()) != NONSIUNITS.end())
+        return NONSIUNITS[t.str()];
+    if (SIUNITS.find(t.str()) != SIUNITS.end())
+        return SIUNITS[t.str()];
+    size_t prefixlen{1};
+    if (t.startswith("da"))
+        prefixlen = 2;
+    if (PREFIXES.find(t.str().substr(0, prefixlen)) != PREFIXES.end())
     {
-        f = Factors(Fraction(1, 1000), 0, 0, 1, 0, 0, 0, 0, 0);
+        f = SIUNITS[t.str().substr(prefixlen)];
+        Fraction multiplier{f.get_multiplier()};
+        multiplier *= PREFIXES[t.str().substr(0, prefixlen)];
+        f.set_multiplier(multiplier);
+        return f;
     }
-    else if (t.startswith("da") && t.size() > 2)
-    {
-        f = BASEUNITS[t.str().substr(2)];
-        f.set_multiplier(PREFIXES["da"]);
-    }
-    else if (PREFIXES.find(t.str().substr(0, 1)) != PREFIXES.end() && t.size() > 1)
-    {
-        f = BASEUNITS[t.str().substr(1)];
-        f.set_multiplier(PREFIXES[t.str().substr(0, 1)]);
-    }
-    else if (BASEUNITS.find(t.str()) != BASEUNITS.end())
-    {
-        f = BASEUNITS[t.str()];
-    }
-    else if (t == "(")
+    if (t == "(")
     {
         f = get_expression();
         t = ts.get();
         if (t != ")")
             throw TokenError();
+        return f;
     }
-    else
-        throw TokenError();
-    return f;
+    throw TokenError();
 }
 
 Factors Parser::get_numberterm(bool inpar)
